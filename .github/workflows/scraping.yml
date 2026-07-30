@@ -1,0 +1,44 @@
+name: Scraping de vacantes
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: |
+          pip install -r requirements.txt
+          playwright install --with-deps chromium
+
+      - name: Restaurar base de datos previa
+        uses: actions/download-artifact@v4
+        with:
+          name: vacantes-db
+          path: data
+        continue-on-error: true
+
+      - name: Ejecutar pipeline
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python -m src.main
+
+      - name: Guardar base de datos actualizada
+        uses: actions/upload-artifact@v4
+        with:
+          name: vacantes-db
+          path: data/vacantes.db
+          retention-days: 90
