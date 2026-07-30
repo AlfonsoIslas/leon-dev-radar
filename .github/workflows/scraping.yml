@@ -26,6 +26,7 @@ jobs:
       - name: Restaurar base de datos previa
         uses: dawidd6/action-download-artifact@v6
         with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           workflow: scraping.yml
           name: vacantes-db
           path: data
