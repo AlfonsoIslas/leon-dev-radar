@@ -3,9 +3,12 @@ from .scrapers.computrabajo import ComputrabajoScraper
 from .storage.db import init_db, ya_vista, guardar_vacante
 from .notifier.telegram import notificar_vacante, notificar_resumen
 from .config import settings
+from .scrapers.indeed import IndeedScraper
+
+
 
 # Agrega aquí más scrapers conforme los vayas construyendo
-SCRAPERS = [ComputrabajoScraper]
+SCRAPERS = [ComputrabajoScraper, IndeedScraper]
 
 
 async def ejecutar_pipeline():

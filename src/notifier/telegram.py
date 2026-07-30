@@ -5,8 +5,8 @@ from ..config import settings
 def notificar_vacante(vacante) -> None:
     """Envía un mensaje formateado por Telegram para una vacante nueva."""
     texto = (
-        f"🟢 *Nueva vacante detectada*\n\n"
-        f"*{vacante.titulo}*\n"
+        f"🟢 Nueva vacante detectada\n\n"
+        f"{vacante.titulo}\n"
         f"Empresa: {vacante.empresa}\n"
         f"Ubicación: {vacante.ubicacion or 'N/D'}\n"
         f"Fuente: {vacante.fuente}\n"
@@ -26,7 +26,6 @@ def _enviar_mensaje(texto: str) -> None:
     payload = {
         "chat_id": settings.telegram_chat_id,
         "text": texto,
-        "parse_mode": "Markdown",
         "disable_web_page_preview": True,
     }
     try:
