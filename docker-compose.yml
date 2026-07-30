@@ -1,0 +1,6 @@
+services:
+  leon-dev-radar:
+    build: .
+    env_file: .env
+    volumes:
+      - ./data:/app/data   # persiste la base SQLite fuera del contenedor
