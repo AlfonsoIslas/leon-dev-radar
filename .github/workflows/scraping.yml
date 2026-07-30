@@ -24,11 +24,12 @@ jobs:
           playwright install --with-deps chromium
 
       - name: Restaurar base de datos previa
-        uses: actions/download-artifact@v4
+        uses: dawidd6/action-download-artifact@v6
         with:
+          workflow: scraping.yml
           name: vacantes-db
           path: data
-        continue-on-error: true
+          if_no_artifact_found: warn
 
       - name: Ejecutar pipeline
         env:
