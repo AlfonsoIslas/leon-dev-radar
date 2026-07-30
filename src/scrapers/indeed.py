@@ -54,6 +54,8 @@ class IndeedScraper(BaseScraper):
                     "div.job_seen_beacon, td.resultContent"
                 )
 
+                vistas_en_esta_pagina: set[str] = set()
+
                 for tarjeta in tarjetas:
                     titulo_el = await tarjeta.query_selector(
                         "h2.jobTitle a, a.jcs-JobTitle"
@@ -68,6 +70,12 @@ class IndeedScraper(BaseScraper):
                     titulo = (await titulo_el.inner_text()).strip()
                     href = await titulo_el.get_attribute("href") or ""
                     url = href if href.startswith("http") else f"https://mx.indeed.com{href}"
+                    # Los dos selectores de arriba a veces capturan la
+                    # misma tarjeta por distintas rutas del HTML; nos
+                    # quedamos solo con la primera vez que vemos cada URL.
+                    if url in vistas_en_esta_pagina:
+                        continue
+                    vistas_en_esta_pagina.add(url)
                     empresa = (
                         (await empresa_el.inner_text()).strip()
                         if empresa_el else "N/D"

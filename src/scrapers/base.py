@@ -20,9 +20,15 @@ class Vacante:
     fuente: str = ""
 
     def hash_unico(self) -> str:
-        """Hash para detectar duplicados: mismo puesto+empresa+url."""
+        """Hash para detectar duplicados: mismo puesto+empresa+fuente.
+
+        Deliberadamente NO incluye la URL completa: portales como
+        Indeed regeneran parámetros de tracking en cada carga de
+        página, así que la misma vacante tendría una URL distinta
+        en cada corrida y el dedupe nunca funcionaría.
+        """
         import hashlib
-        base = f"{self.titulo}|{self.empresa}|{self.url}".lower().strip()
+        base = f"{self.titulo}|{self.empresa}|{self.fuente}".lower().strip()
         return hashlib.sha256(base.encode()).hexdigest()
 
 
